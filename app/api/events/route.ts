@@ -22,10 +22,11 @@ const abortController = new AbortController();
  * @returns {Promise<{signature: string, expire: string, token: string, publicKey: string}>} The authentication parameters.
  * @throws {Error} Throws an error if the authentication request fails.
  */
-const authenticator = async (): Promise<{ signature: string; expire: number; token: string; publicKey: string; }> => {
+const authenticator = async (req: NextRequest): Promise<{ signature: string; expire: number; token: string; publicKey: string; }> => {
    try {
-      // Perform the request to the upload authentication endpoint.
-      const response = await fetch("/api/upload-auth");
+      // Build absolute URL for the authentication endpoint
+      const baseUrl = new URL(req.url).origin;
+      const response = await fetch(`${baseUrl}/api/upload-auth`);
       if (!response.ok) {
          // If the server response is not successful, extract the error text for debugging.
          const errorText = await response.text();
@@ -71,10 +72,10 @@ export async function POST(req: NextRequest) {
       // Retrieve authentication parameters for the upload.
       let authParams;
       try {
-         authParams = await authenticator();
+         authParams = await authenticator(req);
       } catch (authError) {
          console.error("Failed to authenticate for upload:", authError);
-         return;
+         return NextResponse.json({ message: 'Failed to authenticate for image upload' }, { status: 500 });
       }
       const { signature, expire, token, publicKey } = authParams;
 
@@ -91,6 +92,10 @@ export async function POST(req: NextRequest) {
             // Abort signal to allow cancellation of the upload if needed.
             abortSignal: abortController.signal,
          });
+
+         if (!uploadResponse.url) {
+            return NextResponse.json({ message: 'Image upload failed - no URL returned' }, { status: 500 });
+         }
 
          event.image = uploadResponse.url;
 
