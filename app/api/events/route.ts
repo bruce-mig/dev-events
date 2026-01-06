@@ -67,3 +67,14 @@ export async function POST(req: NextRequest) {
    }
 
 }
+
+export async function GET() {
+   try {
+      await connectDB()
+      const events = await Event.find().sort({ createdAt: -1 })  // Sort by createdAt in descending order
+      return NextResponse.json({ message: 'Events fetched successfully', events }, { status: 200 })
+
+   } catch (r) {
+      return NextResponse.json({ message: 'Failed to fetch events', error: r instanceof Error ? r.message : 'Unknown' }, { status: 500 })
+   }
+}
