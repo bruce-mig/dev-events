@@ -75,7 +75,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                      <p>{organizer}</p>
                   </section>
 
-                  <EventTags tags={JSON.parse(tags[0])} />
+                  <EventTags tags={tags?.[0] ? JSON.parse(tags[0]) : []} />
 
 
                </div>
