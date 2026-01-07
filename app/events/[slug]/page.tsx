@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const EventDetailItem = ({ icon, alt, label }: { icon: string, alt: string, label: string }) => (
-   <div className="flex-row-gap-2 items-center">
+   <div className="flex flex-row gap-2 items-center">
       <Image src={icon} alt={alt} width={17} height={17} />
       <p>{label}</p>
    </div>
@@ -60,7 +60,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
       return notFound()
    }
 
-   const { description, image, overwiew, date, time, location, mode, agenda, audience, tags, organizer } = event
+   const { description, image, overview, date, time, location, mode, agenda, audience, tags, organizer } = event
 
    if (!description) return notFound()
 
@@ -79,7 +79,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
 
                   <section className="flex-col-gap-2">
                      <h2>Overview</h2>
-                     <p>{overwiew}</p>
+                     <p>{overview}</p>
                   </section>
 
                   <section className="flex-col-gap-2">
@@ -98,7 +98,13 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                      <p>{organizer}</p>
                   </section>
 
-                  <EventTags tags={tags?.[0] ? JSON.parse(tags[0]) : []} />
+                  <EventTags tags={tags?.[0] ? (() => {
+                     try {
+                        return JSON.parse(tags[0]);
+                     } catch {
+                        return [];
+                     }
+                  })() : []} />
 
 
                </div>
