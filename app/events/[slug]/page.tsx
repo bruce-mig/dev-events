@@ -24,11 +24,11 @@ const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
 
 const EventTags = ({ tags }: { tags: string[] }) => (
    <div className="flex flex-row gap-1.5 flex-wrap">
-      {tags.map((tag => (
-         <div className="pill" key={tag}>
+      {tags.map((tag, index) => (
+         <div className="pill" key={index}>
             {tag}
          </div>
-      )))}
+      ))}
    </div>
 )
 
