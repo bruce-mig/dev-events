@@ -10,7 +10,8 @@ export const getSimilarEventsBySlug = async (slug: string) => {
       const event = await Event.findOne({ slug })
       const similarEvents = await Event.find({ _id: { $ne: event._id }, tags: { $in: event.tags } }).lean()
 
-      return similarEvents
+      // Serialize MongoDB objects to plain objects for Client Components
+      return JSON.parse(JSON.stringify(similarEvents))
 
    } catch (e) {
       return [];
