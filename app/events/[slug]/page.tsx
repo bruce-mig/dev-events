@@ -18,7 +18,7 @@ const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
    <div className="agenda">
       <h2>Agenda</h2>
       <ul>
-         {agendaItems.map((item, index) => (
+         {agendaItems?.map((item, index) => (
             <li key={index}>{item}</li>
          ))}
       </ul>
@@ -27,7 +27,7 @@ const EventAgenda = ({ agendaItems }: { agendaItems: string[] }) => (
 
 const EventTags = ({ tags }: { tags: string[] }) => (
    <div className="flex flex-row gap-1.5 flex-wrap">
-      {tags.map((tag, index) => (
+      {tags?.map((tag, index) => (
          <div className="pill" key={index}>
             {tag}
          </div>
@@ -126,7 +126,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
             </div>
          </div>
 
-         <div className="flex w-ful flex-col gap-4 pt-20">
+         <div className="flex w-full flex-col gap-4 pt-20">
             <h2>Similar Events</h2>
             <div className="events">
                {similarEvents.length > 0 && similarEvents.map((similarEvent: IEvent) => (
